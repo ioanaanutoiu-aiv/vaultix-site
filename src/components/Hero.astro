@@ -1,0 +1,259 @@
+---
+---
+<section class="hero" aria-labelledby="hero-name">
+  <!-- Top horizontal divider -->
+  <div class="hero-divider-row" aria-hidden="true">
+    <div class="hero-divider-inner">
+      <div class="hero-divider-line"></div>
+    </div>
+  </div>
+
+  <div class="hero__content-row">
+    <div class="hero__grid">
+      <!-- Left column: hero image -->
+      <div class="hero__image-col">
+        <img
+          src="/assets/images/hero-person.png"
+          alt="Aspen Westervelt, CEO & Co-founder of Vaultix"
+          width="563"
+          height="694"
+          class="hero__image"
+          loading="eager"
+        />
+      </div>
+
+      <!-- Right column: text content -->
+      <div class="hero__content-col">
+        <div class="hero__intro">
+          <div class="hero__top">
+            <p class="hero__label">Our team</p>
+            <h1 id="hero-name" class="hero__name">Aspen Westervelt</h1>
+            <div class="hero__badge">
+              <span class="hero__badge-dot" aria-hidden="true"></span>
+              <span>CEO &amp; Co-founder</span>
+            </div>
+          </div>
+          <a href="#contact" class="btn-primary hero__cta">Contact us</a>
+        </div>
+        <p class="hero__description">
+          Aspen leads Vaultix with a focus on reliability, scalability, and intelligent systems. With a background in data engineering and distributed systems, she has spent years solving the same problems modern teams still face today — silent failures, fragmented visibility, and systems that don't scale.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    background: var(--color-bg-dark);
+    width: 100%;
+  }
+
+  /* Top horizontal divider spanning content width */
+  .hero-divider-row {
+    width: 100%;
+  }
+
+  .hero-divider-inner {
+    max-width: var(--size-container);
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+  }
+
+  .hero-divider-line {
+    width: 100%;
+    height: 1px;
+    background: var(--color-border);
+    position: relative;
+  }
+
+  /* Diamond corner markers */
+  .hero-divider-line::before,
+  .hero-divider-line::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 0.5em;
+    height: 0.5em;
+    background: var(--color-bg-dark);
+    border: 1px solid var(--color-border);
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  .hero-divider-line::before {
+    left: 0;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .hero-divider-line::after {
+    right: 0;
+    transform: translate(50%, -50%) rotate(45deg);
+  }
+
+  /* Content grid */
+  .hero__content-row {
+    max-width: var(--size-container);
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+  }
+
+  .hero__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-left: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    min-height: 43.375em;
+    position: relative;
+  }
+
+  /* Center vertical divider */
+  .hero__grid::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--color-border);
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  /* Image column */
+  .hero__image-col {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  /* Content column */
+  .hero__content-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2.5em;
+    gap: 2.5em;
+  }
+
+  .hero__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5em;
+  }
+
+  .hero__top {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+  }
+
+  .hero__label {
+    font-family: var(--font-body);
+    font-size: 0.875em;
+    font-weight: 400;
+    line-height: 1.286;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+
+  .hero__name {
+    font-family: var(--font-heading);
+    font-size: 3.5em;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 6.72px;
+    text-transform: uppercase;
+    color: var(--color-text-white);
+  }
+
+  .hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5em 1em;
+    background: var(--color-bg-gray);
+    border: 1px solid var(--color-border);
+    font-family: var(--font-body);
+    font-size: 0.875em;
+    font-weight: 400;
+    line-height: 1.286;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    color: var(--color-text-white);
+    width: fit-content;
+  }
+
+  .hero__badge-dot {
+    display: block;
+    width: 0.25em;
+    height: 0.25em;
+    background: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .hero__cta {
+    width: fit-content;
+  }
+
+  .hero__description {
+    font-family: var(--font-body);
+    font-size: 0.875em;
+    font-weight: 400;
+    line-height: 1.286;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  /* Responsive */
+  @media (max-width: 991px) {
+    .hero__name {
+      font-size: 2.5em;
+    }
+
+    .hero__grid {
+      min-height: 32em;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hero__grid {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .hero__grid::before {
+      display: none;
+    }
+
+    .hero__image-col {
+      height: 18.75em;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .hero__content-col {
+      padding: 1.5em;
+    }
+
+    .hero__name {
+      font-size: 2em;
+      letter-spacing: 3px;
+    }
+  }
+
+  @media (max-width: 479px) {
+    .hero__name {
+      font-size: 1.75em;
+      letter-spacing: 2px;
+    }
+  }
+</style>

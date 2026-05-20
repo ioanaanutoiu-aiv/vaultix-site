@@ -1,0 +1,202 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import CTA from '../components/CTA.astro';
+import Footer from '../components/Footer.astro';
+import MenuOverlay from '../components/MenuOverlay.astro';
+---
+<BaseLayout
+  title="Vaultix — Real-time Data Infrastructure for AI Teams"
+  description="Real-time data infrastructure for the next generation of AI teams. Join 2,000+ AI teams already shipping faster with Vaultix."
+>
+  <!-- Full-screen nav overlay -->
+  <MenuOverlay />
+
+  <!-- Site header -->
+  <header class="site-header">
+    <div class="site-header__inner">
+      <Navbar />
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main id="main-content">
+    <Hero />
+    <CTA />
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  import gsap from 'gsap';
+
+  const openBtn   = document.getElementById('menu-open-btn')!;
+  const closeBtn  = document.getElementById('menu-close-btn')!;
+  const overlay   = document.getElementById('menu-overlay')!;
+  const items     = overlay.querySelectorAll<HTMLElement>('.menu-overlay__item');
+  const footer    = overlay.querySelector<HTMLElement>('.menu-overlay__footer')!;
+  const divider   = overlay.querySelector<HTMLElement>('.menu-overlay__divider')!;
+  const overlayLinks = overlay.querySelectorAll<HTMLAnchorElement>('.menu-overlay__link');
+  const body      = document.body;
+
+  let isOpen   = false;
+  let timeline: gsap.core.Timeline | null = null;
+
+  // Respect prefers-reduced-motion
+  const mm = gsap.matchMedia();
+
+  mm.add(
+    {
+      motion:      '(prefers-reduced-motion: no-preference)',
+      reducedMotion: '(prefers-reduced-motion: reduce)',
+    },
+    (ctx) => {
+      const { reducedMotion } = ctx.conditions as { motion: boolean; reducedMotion: boolean };
+
+      // Initial hidden state
+      gsap.set(overlay, { scaleY: 0, transformOrigin: 'top center', visibility: 'hidden' });
+      gsap.set(items,   { y: 60, autoAlpha: 0 });
+      gsap.set(footer,  { autoAlpha: 0 });
+
+      // ── Open ──────────────────────────────────────
+      function openMenu() {
+        if (isOpen) return;
+        isOpen = true;
+
+        // Manage ARIA + focus
+        openBtn.setAttribute('aria-expanded', 'true');
+        overlay.setAttribute('aria-hidden', 'false');
+        overlayLinks.forEach((l) => l.setAttribute('tabindex', '0'));
+        closeBtn.setAttribute('tabindex', '0');
+        body.style.overflow = 'hidden';
+
+        if (timeline) timeline.kill();
+
+        if (reducedMotion) {
+          gsap.set(overlay, { scaleY: 1, visibility: 'visible' });
+          gsap.set(items,   { y: 0, autoAlpha: 1 });
+          gsap.set(footer,  { autoAlpha: 1 });
+          closeBtn.focus();
+          return;
+        }
+
+        timeline = gsap.timeline({
+          defaults: { ease: 'power3.out' },
+          onComplete: () => closeBtn.focus(),
+        });
+
+        timeline
+          // 1. Panel drops from top
+          .to(overlay, {
+            scaleY: 1,
+            visibility: 'visible',
+            duration: 0.9,
+            ease: 'expo.inOut',
+          })
+          // 2. Items stagger down (overlaps with panel)
+          .to(items, {
+            y: 0,
+            autoAlpha: 1,
+            duration: 0.75,
+            stagger: 0.07,
+          }, '-=0.45')
+          // 3. Footer fades in last
+          .to(footer, {
+            autoAlpha: 1,
+            duration: 0.4,
+          }, '-=0.3');
+      }
+
+      // ── Close ─────────────────────────────────────
+      function closeMenu() {
+        if (!isOpen) return;
+        isOpen = false;
+
+        openBtn.setAttribute('aria-expanded', 'false');
+        overlay.setAttribute('aria-hidden', 'true');
+        overlayLinks.forEach((l) => l.setAttribute('tabindex', '-1'));
+        closeBtn.setAttribute('tabindex', '-1');
+        body.style.overflow = '';
+
+        if (timeline) timeline.kill();
+
+        if (reducedMotion) {
+          gsap.set(overlay, { scaleY: 0, visibility: 'hidden' });
+          gsap.set(items,   { y: 60, autoAlpha: 0 });
+          gsap.set(footer,  { autoAlpha: 0 });
+          openBtn.focus();
+          return;
+        }
+
+        timeline = gsap.timeline({
+          onComplete: () => {
+            gsap.set(overlay, { visibility: 'hidden' });
+            openBtn.focus();
+          },
+        });
+
+        timeline
+          // 1. Items + footer fade out fast
+          .to([items, footer], {
+            autoAlpha: 0,
+            y: 30,
+            duration: 0.35,
+            stagger: 0.04,
+            ease: 'power2.in',
+          })
+          // 2. Panel retracts upward
+          .to(overlay, {
+            scaleY: 0,
+            duration: 0.7,
+            ease: 'expo.inOut',
+          }, '-=0.15');
+      }
+
+      // ── Event listeners ───────────────────────────
+      openBtn.addEventListener('click',  openMenu);
+      closeBtn.addEventListener('click', closeMenu);
+
+      // Close on Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isOpen) closeMenu();
+      });
+
+      // Close when a nav link is clicked
+      overlayLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+          if (isOpen) closeMenu();
+        });
+      });
+
+      return () => {
+        if (timeline) timeline.kill();
+        body.style.overflow = '';
+      };
+    }
+  );
+</script>
+
+<style>
+  .site-header {
+    background: var(--color-bg-dark);
+    position: relative;
+  }
+
+  .site-header__inner {
+    max-width: var(--size-container);
+    margin-inline: auto;
+    padding: 1.5em 11em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  @media (max-width: 991px) {
+    .site-header__inner {
+      padding: 1.5em var(--container-padding);
+    }
+  }
+</style>

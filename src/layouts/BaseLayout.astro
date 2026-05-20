@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+}
+const {
+  title = "Vaultix — Real-time Data Infrastructure for AI Teams",
+  description = "Real-time data infrastructure for the next generation of AI teams.",
+  canonical = Astro.url.href,
+} = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <slot name="head" />
+  </head>
+  <body>
+    <a href="#main-content" class="sr-only sr-only--focusable">Skip to main content</a>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  .sr-only--focusable:focus {
+    position: fixed;
+    top: 0.5em;
+    left: 0.5em;
+    z-index: 9999;
+    width: auto;
+    height: auto;
+    padding: 0.75em 1.5em;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    background-color: var(--color-primary);
+    color: var(--color-text-btn);
+    font-family: var(--font-body);
+    font-size: 0.875em;
+    font-weight: 700;
+    letter-spacing: 1.68px;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+</style>
